@@ -6,7 +6,7 @@ original = pandas.read_csv('athlete_events.csv')
 
 # remove winter entries
 summer = original[~original.Season.str.contains("Winter")]
-#print(df)
+summer = summer.drop(columns = ['Season', 'Games', 'Name', 'ID'])
 latest_games = summer['Year'] > 2004
 recent = summer[latest_games]
 
@@ -21,5 +21,8 @@ recent_sports = recent_sports[recent_sports.Year > 6]['Sport']
 final_data = summer.loc[summer['Sport'].isin(recent_sports)]
 print(final_data.loc[final_data.Sport == 'Badminton'])
 
+# remove unwanted columns
 
+null_columns=final_data.columns[final_data.isnull().any()]
+print(final_data[null_columns].isnull().sum())
 #
