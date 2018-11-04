@@ -7,7 +7,7 @@ original = pandas.read_csv('athlete_events.csv')
 
 # remove winter entries
 summer = original[~original.Season.str.contains("Winter")]
-summer = summer.drop(columns = ['Season', 'Games', 'Name', 'ID'])
+summer = summer.drop(columns = ['Season', 'Games', 'Name', 'ID', 'Event', 'City'])
 latest_games = summer['Year'] > 2004
 recent = summer[latest_games]
 
@@ -22,26 +22,38 @@ recent_sports = recent_sports[recent_sports.Year > 6]['Sport']
 # keep sports found in recent sports
 final_data = summer.loc[summer['Sport'].isin(recent_sports)]
 
-# replace NA values with columnmean
-final_data = final_data.fillna(final_data.mean())
-print(final_data)
+# replace NA values with column mean
+final_data['Height'].fillna((final_data['Height'].mean()), inplace = True)
+final_data['Weight'].fillna((final_data['Weight'].mean()), inplace = True)
+final_data['Age'].fillna((final_data['Age'].mean()), inplace = True)
 
 # Stratified Sampling - testing/training #214510 	#150154		#64356		
 training_set = final_data[final_data['Year'] < 2000]
 testing_set = final_data.drop(training_set.index, axis = 0)
 
 # divide into X and y
+y_train = training_set[['Medal']].copy()
 X_train = training_set.drop('Medal', 1)
-y_train = training_set['Medal']
+y_train = y_train.replace(np.nan, 'No', regex = True)
 
 X_test = testing_set.drop('Medal', 1)
-y_test = testing_set['Medal']
+y_test = testing_set[['Medal']].copy()
+y_test = y_test.replace(np.nan, 'No', regex = True)
+
+# Encode string data for Decision Tree classifier
+X_train['Sex'],_ = pandas.factorize(X_train['Sex'])
+X_train['NOC'],_ = pandas.factorize(X_train['NOC'])
+X_train['Sport'],_ = pandas.factorize(X_train['Sport'])
+X_train['Team'],_ = pandas.factorize(X_train['Team'])	
+
+y_train['Medal'],_ = pandas.factorize(y_train['Medal'])
 
 gini_classifier = DecisionTreeClassifier(criterion = "gini", random_state = 100)
 gini_classifier.fit(X_train, y_train)
 
-features = list(training_set.head(0))
-#print(features)
+features = list(X_train.head(0))
+print(features)
+
 
 def visualize_tree(tree, feature_names):
     with open("dt.dot", 'w') as f:
@@ -55,5 +67,5 @@ def visualize_tree(tree, feature_names):
         exit("Could not run dot, ie graphviz, to "
              "produce visualization")
 
+visualize_tree(gini_classifier, features)
 
-#visualize_tree(gini_classifier, features)
