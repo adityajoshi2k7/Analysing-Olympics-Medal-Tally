@@ -1,6 +1,8 @@
 #!/usr/bin/python
 import numpy as np
 import pandas
+from subprocess import check_call
+from sklearn.metrics import accuracy_score
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 
 original = pandas.read_csv('athlete_events.csv')
@@ -48,24 +50,25 @@ X_train['Team'],_ = pandas.factorize(X_train['Team'])
 
 y_train['Medal'],_ = pandas.factorize(y_train['Medal'])
 
-gini_classifier = DecisionTreeClassifier(criterion = "gini", random_state = 100)
-gini_classifier.fit(X_train, y_train)
+X_test['Sex'],_ = pandas.factorize(X_test['Sex'])
+X_test['NOC'],_ = pandas.factorize(X_test['NOC'])
+X_test['Sport'],_ = pandas.factorize(X_test['Sport'])
+X_test['Team'],_ = pandas.factorize(X_test['Team'])	
 
-features = list(X_train.head(0))
-print(features)
+y_test['Medal'],_ = pandas.factorize(y_test['Medal'])
 
+# Gini Classifier
+def decision_tree(classifier):
+	dec_classifier = DecisionTreeClassifier(criterion = classifier, random_state = 100, max_depth = 7)
+	dec_classifier.fit(X_train, y_train)
 
-def visualize_tree(tree, feature_names):
-    with open("dt.dot", 'w') as f:
-        export_graphviz(tree, out_file=f,
-                        feature_names=feature_names)
+	features = list(X_train.head(0))
+	print(features)
+	export_graphviz(dec_classifier, out_file = 'tree.dot')
 
-    command = ["dot", "-Tpng", "dt.dot", "-o", "dt.png"]
-    try:
-        subprocess.check_call(command)
-    except:
-        exit("Could not run dot, ie graphviz, to "
-             "produce visualization")
+	y_pred = dec_classifier.predict(X_test)
+	print('\nAccuracy score for classifier: ', classifier, ' : ', accuracy_score(y_test, y_pred) * 100)
 
-visualize_tree(gini_classifier, features)
+decision_tree('gini')
+decision_tree('entropy')
 
