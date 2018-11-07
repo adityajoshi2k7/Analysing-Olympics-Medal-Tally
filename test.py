@@ -59,11 +59,11 @@ y_test['Medal'],_ = pandas.factorize(y_test['Medal'])
 
 # Gini Classifier
 def decision_tree(classifier):
-	dec_classifier = DecisionTreeClassifier(criterion = classifier, random_state = 100, max_depth = 7)
+	dec_classifier = DecisionTreeClassifier(criterion = classifier, random_state = 100, max_depth = 4)
 	dec_classifier.fit(X_train, y_train)
 
 	features = list(X_train.head(0))
-	print(features)
+	#print(features)
 	export_graphviz(dec_classifier, out_file = 'tree.dot')
 
 	y_pred = dec_classifier.predict(X_test)
