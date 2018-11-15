@@ -4,11 +4,13 @@ import pandas
 from subprocess import check_call
 import seaborn as sns
 from matplotlib import pyplot as plt
+from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 import keras
 from keras.models import Sequential
 from keras.layers import Dense
+from keras.wrappers.scikit_learn import KerasClassifier
 
 
 original = pandas.read_csv('athlete_events.csv')
@@ -134,34 +136,57 @@ decision_tree('gini')
 decision_tree('entropy')
 
 #ANN begins
+accuracy = []
+max_accuracy = 0
+optimial_params = []
 
-def bulid_ann_model(neurons, optimizer, x, y, activation):
+#def bulid_ann_model(neurons, optimizer, x, y, activation):
+#    global max_accuracy
+#    model = Sequential()
+#    model.add(Dense(neurons, input_dim = 7, activation = activation))
+#    model.add(Dense(neurons, activation = activation))
+#    model.add(Dense(1, activation = 'sigmoid'))
+#
+#    model.compile(loss = 'mse', optimizer = optimizer, metrics = ['accuracy'])
+#    model.fit(X_train, y_train, epochs = 10, batch_size = 50)
+#
+#    scores = model.evaluate(x, y)
+#    accuracy.append(scores[1]*100)
+#
+#    if(scores[1]*100 > max_accuracy):
+#        max_accuracy = scores[1]*100
+#        optimial_params = [neurons, optimizer, activation]
 
-	model = Sequential()
-	model.add(Dense(neurons, imput_dim = 7, activation = activation))
-	model.add(Dense(neurons, activation = activation))
-	model.add(Dense(1, activation = 'sigmoid'))
+# creating ann model
+def create_ann_model(activation = 'relu', neurons = 1, optimizer = 'adam'):
+    model = Sequential()
+    model.add(Dense(neurons, input_dim = 7, activation = activation))
+    model.add(Dense(1, activation = 'sigmoid'))
+    model.compile(loss = 'mse', metrics = ['accuracy'], optimizer = optimizer)
+    return model
 
-	model.compile(loss = 'mse', optimizer = opitmizer, metrics = ['accuracy'])
-	model.fit(X_train, y_train, epochs = 10, batch_size = 50)
+#defining grid search parameters
+neurons = [2, 4, 6, 8, 10]
+optimizer = ['adam', 'sgd', 'rmsprop']
+activation = ['relu', 'sigmoid', 'tanh', 'linear']
+epochs = [10, 50, 100]
+batch_size = [10, 20, 40, 60, 80, 100]
+param_grid = dict(epochs = epochs, batch_size = batch_size, optimizer = optimizer, activation = activation, neurons = neurons)
 
-	scores = model.evaluate(x, y)
+model = KerasClassifier(build_fn = create_ann_model, verbose = 0)
+grid = GridSearchCV(estimator = model, param_grid = param_grid, n_jobs = -1)
+grid_results = grid.fit(X_train, y_train)
 
-	print('Accuracy :', scores[1]*100)
-
-neurons = [2,4,6,8,10]
-optimizers = ['adam', 'sgd', 'rmsprop', 'adagrad']
-activations = ['relu', 'sigmoid', 'tanh', 'exponential']
-
-for neuron in neurons :
-	print('neurons', neuron)
-	for optimizer in optimizers :
-		print('optimizer ', optimizer)
-		for activation in activations :
-			print(' activation', activation)
-			bulid_ann_model (neuron, optimizer, X_train, y_train, activation)
+# results
+print('Best parameter: ', grid_results.best_score_, grid_results.best_params_)
 
 
+#for neuron in neurons :
+#    for optimizer in optimizers :
+#        for activation in activations :
+#            bulid_ann_model (neuron, optimizer, X_train, y_train, activation)
+#
+#print(optimial_params, max_accuracy)
 
 
 
