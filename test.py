@@ -116,9 +116,10 @@ def decision_tree(classifier):
 	features = list(X_train.head(0))
 	#print(features)
 	export_graphviz(dec_classifier, out_file = 'tree.dot')
-
-	y_pred = dec_classifier.predict(X_test)
-	print('\nAccuracy score for classifier: ', classifier, ' : ', accuracy_score(y_test, y_pred) * 100)
+    y_pred = dec_classifier.predict(X_test)
+    print('Classifier :', classifier)
+    print('\nAccuracy: ', accuracy_score(y_test, y_pred) * 100)
+    print('\nPrecision and Recall', precision_recall_fscore_support(y_test, y_pred))
 
 decision_tree('gini')
 decision_tree('entropy')
