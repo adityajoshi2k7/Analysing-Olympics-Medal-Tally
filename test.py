@@ -114,7 +114,14 @@ def decision_tree(classifier):
     dec_classifier.fit(X_train, y_train)
 
     features = list(X_train.head(0))
-    export_graphviz(dec_classifier, out_file = 'tree.dot')
+    if classifier=='gini':
+		export_graphviz(dec_classifier, out_file = 'gini_tree.dot')
+
+		check_call(['dot','-Tpng','gini_tree.dot','-o','gini_OutputFile.png'])
+	else :
+		export_graphviz(dec_classifier, out_file = 'entropy_tree.dot')
+
+		check_call(['dot','-Tpng','entropy_tree.dot','-o','entropy_OutputFile.png'])
     y_pred = dec_classifier.predict(X_test)
     print('Classifier :', classifier)
     print('\nAccuracy: ', accuracy_score(y_test, y_pred) * 100)
