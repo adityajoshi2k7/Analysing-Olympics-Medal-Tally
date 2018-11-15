@@ -4,7 +4,7 @@ import pandas
 from subprocess import check_call
 import seaborn as sns
 from matplotlib import pyplot as plt
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
 
 original = pandas.read_csv('athlete_events.csv')
@@ -58,7 +58,7 @@ women_olympics = final_data[(final_data.Sex == 'F')]
 plt.figure(figsize = (20, 10))
 sns.countplot(x = 'Year', data = women_olympics)
 plt.title('Women participation')
-plt.show()
+#plt.show()
 
 # Men vs Women over time
 men_dist = final_data[(final_data.Sex == 'M')]
@@ -70,7 +70,7 @@ men.loc[:,'M'].plot()
 women.loc[:,'F'].plot()
 plt.legend(['Male', 'Female'], loc='upper left')
 plt.title('Male and Female participation over the years ')
-plt.show()
+#plt.show()
 
 # Indian Medals over the year
 indian_medals = final_data[final_data.Team == 'India']
@@ -78,7 +78,7 @@ plt.figure(figsize = (20, 10))
 plt.tight_layout()
 sns.countplot(x = 'Year', hue = 'Medal', data = indian_medals)
 plt.title("India's Total Medal count")
-plt.show()
+#plt.show()
 
 # Stratified Sampling - testing/training #214510 	#150154		#64356		
 training_set = final_data[final_data['Year'] < 2000]
@@ -110,16 +110,16 @@ y_test['Medal'],_ = pandas.factorize(y_test['Medal'])
 
 # Gini Classifier
 def decision_tree(classifier):
-	dec_classifier = DecisionTreeClassifier(criterion = classifier, random_state = 100, max_depth = 4)
-	dec_classifier.fit(X_train, y_train)
+    dec_classifier = DecisionTreeClassifier(criterion = classifier, random_state = 100, max_depth = 1, random_state = 10)
+    dec_classifier.fit(X_train, y_train)
 
-	features = list(X_train.head(0))
-	#print(features)
-	export_graphviz(dec_classifier, out_file = 'tree.dot')
+    features = list(X_train.head(0))
+    export_graphviz(dec_classifier, out_file = 'tree.dot')
     y_pred = dec_classifier.predict(X_test)
     print('Classifier :', classifier)
     print('\nAccuracy: ', accuracy_score(y_test, y_pred) * 100)
-    print('\nPrecision and Recall', precision_recall_fscore_support(y_test, y_pred))
+    precision, recall, fscore, support = precision_recall_fscore_support(y_test, y_pred, average = 'micro')
+    print('\nPrecision: %f Recall: %f F-score: %f', precision, recall, fscore)
 
 decision_tree('gini')
 decision_tree('entropy')
