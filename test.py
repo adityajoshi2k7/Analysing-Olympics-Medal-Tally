@@ -4,11 +4,8 @@ import pandas
 from subprocess import check_call
 import seaborn as sns
 from matplotlib import pyplot as plt
-from sklearn.metrics import accuracy_score, precision_recall_fscore_support
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support, confusion_matrix
 from sklearn.tree import DecisionTreeClassifier, export_graphviz
-import keras
-from keras.models import Sequential
-from keras.layers import Dense
 
 
 original = pandas.read_csv('athlete_events.csv')
@@ -83,10 +80,11 @@ plt.tight_layout()
 sns.countplot(x = 'Year', hue = 'Medal', data = indian_medals)
 plt.title("India's Total Medal count")
 #plt.show()
-
 # Stratified Sampling - testing/training #214510 	#150154		#64356		
 training_set = final_data[final_data['Year'] < 2000]
 testing_set = final_data.drop(training_set.index, axis = 0)
+training_set=training_set.drop(columns = ['Year'])
+testing_set=testing_set.drop(columns = ['Year'])
 
 # divide into X and y
 y_train = training_set[['Medal']].copy()
@@ -129,37 +127,37 @@ def decision_tree(classifier):
     print('\nAccuracy: ', accuracy_score(y_test, y_pred) * 100)
     precision, recall, fscore, support = precision_recall_fscore_support(y_test, y_pred, average = 'micro')
     print('\nPrecision: ', precision, '\nRecall: ', recall, '\nF-score: ', fscore)
-
 decision_tree('gini')
 decision_tree('entropy')
 
+
 #ANN begins
 
-def bulid_ann_model(neurons, optimizer, x, y, activation):
+# def bulid_ann_model(neurons, optimizer, x, y, activation):
 
-	model = Sequential()
-	model.add(Dense(neurons, imput_dim = 7, activation = activation))
-	model.add(Dense(neurons, activation = activation))
-	model.add(Dense(1, activation = 'sigmoid'))
+# 	model = Sequential()
+# 	model.add(Dense(neurons, input_dim = 7, activation = activation))
+# 	model.add(Dense(neurons, activation = activation))
+# 	model.add(Dense(1, activation = 'sigmoid'))
 
-	model.compile(loss = 'mse', optimizer = opitmizer, metrics = ['accuracy'])
-	model.fit(X_train, y_train, epochs = 10, batch_size = 50)
+# 	model.compile(loss = 'mse', optimizer = optimizer, metrics = ['accuracy'])
+# 	model.fit(X_train, y_train, epochs = 10, batch_size = 50)
 
-	scores = model.evaluate(x, y)
+# 	scores = model.evaluate(x, y)
 
-	print('Accuracy :', scores[1]*100)
+# 	print('Accuracy :', scores[1]*100)
 
-neurons = [2,4,6,8,10]
-optimizers = ['adam', 'sgd', 'rmsprop', 'adagrad']
-activations = ['relu', 'sigmoid', 'tanh', 'exponential']
+# neurons = [2,4,6,8,10]
+# optimizers = ['adam', 'sgd', 'rmsprop', 'adagrad']
+# activations = ['relu', 'sigmoid', 'tanh', 'exponential']
 
-for neuron in neurons :
-	print('neurons', neuron)
-	for optimizer in optimizers :
-		print('optimizer ', optimizer)
-		for activation in activations :
-			print(' activation', activation)
-			bulid_ann_model (neuron, optimizer, X_train, y_train, activation)
+# for neuron in neurons :
+# 	print('neurons', neuron)
+# 	for optimizer in optimizers :
+# 		print('optimizer ', optimizer)
+# 		for activation in activations :
+# 			print(' activation', activation)
+# 			bulid_ann_model (neuron, optimizer, X_train, y_train, activation)
 
 
 
