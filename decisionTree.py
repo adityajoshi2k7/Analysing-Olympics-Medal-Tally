@@ -30,11 +30,12 @@ def classifier(classifier,X_train,y_train,X_test,y_test):
 
     #features = list(X_train.head(0))
     if classifier=='gini':
-        export_graphviz(dec_classifier, out_file = 'gini_tree.dot', feature_names = X_train.columns)
-        check_call(['dot','-Tpng','gini_tree.dot','-o','gini_OutputFile.png'])
+        export_graphviz(dec_classifier, out_file = 'figures/gini_tree.dot', feature_names = X_train.columns)
+        check_call(['dot','-Tpng','figures/gini_tree.dot','-o','figures/gini_OutputFile.png'])
     else :
-        export_graphviz(dec_classifier, out_file = 'entropy_tree.dot', feature_names = X_train.columns)
-        check_call(['dot','-Tpng','entropy_tree.dot','-o','entropy_OutputFile.png'])
+        export_graphviz(dec_classifier, out_file = 'figures/entropy_tree.dot', feature_names = X_train.columns)
+        check_call(['dot','-Tpng','figures/entropy_tree.dot','-o','figures/entropy_OutputFile.png'])
+        
     y_pred = dec_classifier.predict(X_test)
     print('Classifier :', classifier)
     print('\nAccuracy: ', accuracy_score(y_test, y_pred) * 100)
