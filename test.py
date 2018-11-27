@@ -14,13 +14,17 @@ from keras.wrappers.scikit_learn import KerasClassifier
 
 
 original = pandas.read_csv('athlete_events.csv')
+city_country_map = {'Barcelona' : 'ESP', 'London' : 'GBR', 'Antwerpen' : 'BEL', 'Paris' : 'FRA', 'Los Angeles' : 'USA', 'Helsinki' : 'FIN', 'Sydney' :  'AUS', 'Atlanta' : 'USA', 'Stockholm' : 'SWE', 'Beijing' : 'CHN', 'Rio de Janeiro' : 'BRA',  'Athina' : 'GRE', 'Mexico City' : 'MEX', 'Munich' : 'GER', 'Seoul' : 'KOR', 'Berlin' : 'GER',  'Melbourne' : 'AUS', 'Roma' : 'ITA', 'Amsterdam' : 'NED', 'Montreal' : 'CAN', 'Moskva' : 'RUS', 'Tokyo' : 'JPN', 'St. Louis' : 'USA'}
 
-# remove winter entries
+# remove winter entries and change host city to host country
 summer = original[~original.Season.str.contains("Winter")]
-summer = summer.drop(columns = ['Season', 'Games', 'Name', 'ID', 'Event', 'City', 'NOC'])
+summer = summer.drop(columns = ['Season', 'Games', 'Name', 'ID', 'Event', 'NOC'])
+summer = summer.rename(index=str, columns={"City" : "Host_Country"})
+summer['Host_Country'] = summer['Host_Country'].replace(city_country_map)
+print(summer)
 latest_games = summer['Year'] > 2004
 recent = summer[latest_games]
-
+'''
 # find recent sports; remove sports not played now
 recent_sports =  recent[['Sport', 'Year']].drop_duplicates().groupby('Sport')['Year'].count().reset_index()['Sport']
 recent_sports = summer.loc[summer['Sport'].isin(recent_sports)]
@@ -189,7 +193,7 @@ print('Best parameter: ', grid_results.best_score_, grid_results.best_params_)
 #            bulid_ann_model (neuron, optimizer, X_train, y_train, activation)
 #
 #print(optimial_params, max_accuracy)
-
+'''
 
 
 
