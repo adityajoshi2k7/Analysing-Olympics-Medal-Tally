@@ -165,28 +165,22 @@ def create_ann_model(activation = 'relu', neurons = 1, optimizer = 'adam'):
     model.compile(loss = 'mse', metrics = ['accuracy'], optimizer = optimizer)
     return model
 
-#defining grid search parameters
+# defining grid search parameters
 neurons = [2, 4, 6, 8, 10]
 optimizer = ['adam', 'sgd', 'rmsprop']
 activation = ['relu', 'sigmoid', 'tanh', 'linear']
-epochs = [10, 50, 100]
-batch_size = [10, 20, 40, 60, 80, 100]
+epochs = [10]
+batch_size = [50]
 param_grid = dict(epochs = epochs, batch_size = batch_size, optimizer = optimizer, activation = activation, neurons = neurons)
 
-model = KerasClassifier(build_fn = create_ann_model, verbose = 0)
+# Grid Search
+model = KerasClassifier(build_fn = create_ann_model)
 grid = GridSearchCV(estimator = model, param_grid = param_grid, n_jobs = -1)
 grid_results = grid.fit(X_train, y_train)
 
-# results
+# Best combination of hyper-parameters
 print('Best parameter: ', grid_results.best_score_, grid_results.best_params_)
 
-
-#for neuron in neurons :
-#    for optimizer in optimizers :
-#        for activation in activations :
-#            bulid_ann_model (neuron, optimizer, X_train, y_train, activation)
-#
-#print(optimial_params, max_accuracy)
 
 
 
