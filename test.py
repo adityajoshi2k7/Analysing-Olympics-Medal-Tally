@@ -85,10 +85,11 @@ plt.tight_layout()
 sns.countplot(x = 'Year', hue = 'Medal', data = indian_medals)
 plt.title("India's Total Medal count")
 #plt.show()
-
 # Stratified Sampling - testing/training #214510 	#150154		#64356		
 training_set = final_data[final_data['Year'] < 2000]
 testing_set = final_data.drop(training_set.index, axis = 0)
+training_set=training_set.drop(columns = ['Year'])
+testing_set=testing_set.drop(columns = ['Year'])
 
 # divide into X and y
 y_train = training_set[['Medal']].copy()
@@ -131,11 +132,12 @@ def decision_tree(classifier):
     print('\nAccuracy: ', accuracy_score(y_test, y_pred) * 100)
     precision, recall, fscore, support = precision_recall_fscore_support(y_test, y_pred, average = 'micro')
     print('\nPrecision: ', precision, '\nRecall: ', recall, '\nF-score: ', fscore)
-
 decision_tree('gini')
 decision_tree('entropy')
 
+
 #ANN begins
+
 accuracy = []
 max_accuracy = 0
 optimial_params = []
