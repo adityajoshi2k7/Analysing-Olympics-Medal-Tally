@@ -5,6 +5,7 @@ from subprocess import check_call
 import seaborn as sns
 from matplotlib import pyplot as plt
 from decisionTree import decision_tree
+from svm import svm
 #from ann import ann_classifier
 
 original = pandas.read_csv('athlete_events.csv')
@@ -40,6 +41,7 @@ final_data['Age'].fillna((final_data['Age'].mean()), inplace = True)
 print('\nCorrelation b/w Age, Height and Weight: \n', final_data[['Age', 'Height', 'Weight']].corr())
 print('\n', final_data.describe())
 
+'''
 # Medal Tally - Top 10 countries
 medals_country = final_data.groupby(['Team','Medal'])['Sex'].count().reset_index().sort_values(by = 'Sex', ascending = False)
 medals_country = medals_country.pivot('Team', 'Medal', 'Sex').fillna(0)
@@ -83,6 +85,7 @@ plt.tight_layout()
 sns.countplot(x = 'Year', hue = 'Medal', data = indian_medals)
 plt.title("India's Total Medal count")
 #plt.show()
+'''
 
 # Stratified Sampling - testing/training #214510 	#150154		#64356		
 training_set = final_data[final_data['Year'] < 2000]
@@ -99,7 +102,7 @@ X_test = testing_set.drop('Medal', 1)
 y_test = testing_set[['Medal']].copy()
 y_test = y_test.replace(np.nan, 'No', regex = True)
 
-
+'''
 # Decision Tree Classifier
 decision_tree(X_train,y_train,X_test,y_test)
 
@@ -107,8 +110,11 @@ decision_tree(X_train,y_train,X_test,y_test)
 final_X = final_data.drop(columns = ['Medal'])
 final_Y = final_data['Medal'] 
 #ann_classifier(final_X, final_Y)
+'''
 
-
+# SVM Classifier
+print("SVM Starting\n")
+svm(X_train, y_train, X_test, y_test)
 
 
 
