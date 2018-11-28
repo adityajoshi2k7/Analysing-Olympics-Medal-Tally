@@ -5,11 +5,8 @@ from subprocess import check_call
 import seaborn as sns
 from matplotlib import pyplot as plt
 from decisionTree import decision_tree
-<<<<<<< Updated upstream
 from svm import svm
-=======
 from lstm import lstm_classifier
->>>>>>> Stashed changes
 #from ann import ann_classifier
 
 original = pandas.read_csv('athlete_events.csv')
