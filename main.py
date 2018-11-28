@@ -5,7 +5,11 @@ from subprocess import check_call
 import seaborn as sns
 from matplotlib import pyplot as plt
 from decisionTree import decision_tree
+<<<<<<< Updated upstream
 from svm import svm
+=======
+from lstm import lstm_classifier
+>>>>>>> Stashed changes
 #from ann import ann_classifier
 
 original = pandas.read_csv('athlete_events.csv')
@@ -90,8 +94,8 @@ plt.title("India's Total Medal count")
 # Stratified Sampling - testing/training #214510 	#150154		#64356		
 training_set = final_data[final_data['Year'] < 2000]
 testing_set = final_data.drop(training_set.index, axis = 0)
-training_set=training_set.drop(columns = ['Year'])
-testing_set=testing_set.drop(columns = ['Year'])
+training_set = training_set.drop(columns = ['Year'])
+testing_set = testing_set.drop(columns = ['Year'])
 
 # divide into X and y
 y_train = training_set[['Medal']].copy()
@@ -115,6 +119,16 @@ final_Y = final_data['Medal']
 # SVM Classifier
 print("SVM Starting\n")
 svm(X_train, y_train, X_test, y_test)
+
+
+# LSTM Classifier
+# final_data.set_index('Year', inplace = True)
+# final_data.sort_index(inplace = True)
+# final_data.replace(np.nan, 'No', regex = True, inplace = True)
+
+# lstm_classifier(final_data)
+
+
 
 
 
