@@ -5,12 +5,13 @@ from subprocess import check_call
 import seaborn as sns
 from matplotlib import pyplot as plt
 from decisionTree import decision_tree
-#from svm import svm
+from svm import svm
 #from lstm import lstm_classifier
 #from ann import ann_classifier
 from sampling import sample_dataset
+from sklearn.model_selection import train_test_split
 
-final_data = sample_dataset()
+final_data = sample_dataset(True)
 
 # replace NA values with column mean
 final_data['Height'].fillna((final_data['Height'].mean()), inplace = True)
@@ -67,26 +68,29 @@ plt.title("India's Total Medal count")
 '''
 
 # Stratified Sampling - testing/training #214510 	#150154		#64356		
-training_set = final_data[final_data['Year'] < 2000]
-testing_set = final_data.drop(training_set.index, axis = 0)
-training_set = training_set.drop(columns = ['Year'])
-testing_set = testing_set.drop(columns = ['Year'])
+# training_set = final_data[final_data['Year'] < 2000]
+# testing_set = final_data.drop(training_set.index, axis = 0)
+# training_set = training_set.drop(columns = ['Year'])
+# testing_set = testing_set.drop(columns = ['Year'])
 # testing_set = testing_set[pandas.notnull(testing_set['Medal'])]
+# training_set = final_data[final_data['Year'] < 2000]
+# testing_set = final_data.drop(training_set.index, axis = 0)
 
-print(training_set['Medal'].value_counts())
-print('\nNull values per attribute: \n', training_set['Medal'].isnull().sum())
-print(testing_set['Medal'].value_counts())
-print('\nNull values per attribute: \n', testing_set['Medal'].isnull().sum())
+
+# training_set = training_set.drop(columns = ['Year'])
+# testing_set = testing_set.drop(columns = ['Year'])
+
+training_set, testing_set = train_test_split(final_data, test_size = 0.25, random_state = 100)
 
 
 # divide into X and y
 y_train = training_set[['Medal']].copy()
 X_train = training_set.drop('Medal', 1)
-y_train = y_train.replace(np.nan, 'No', regex = True)
+#y_train = y_train.replace(np.nan, 'No', regex = True)
 
 X_test = testing_set.drop('Medal', 1)
 y_test = testing_set[['Medal']].copy()
-y_test = y_test.replace(np.nan, 'No', regex = True)
+#y_test = y_test.replace(np.nan, 'No', regex = True)
 
 
 # Decision Tree Classifier
@@ -100,7 +104,7 @@ final_Y = final_data['Medal']
 
 # SVM Classifier
 print("SVM Starting\n")
-#svm(X_train, y_train, X_test, y_test)
+# svm(X_train, y_train, X_test, y_test)
 
 
 #LSTM Classifier

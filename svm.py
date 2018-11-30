@@ -40,15 +40,16 @@ def grid_search(X_train, Y_train):
     return clf.best_params_['kernel']
 '''
 def svclassification(X_train, y_train, X_test, y_test):
-	params = ['linear','rbf','poly','sigmoid']
-	accuracy_dict = {}
-	for param in params:
-		clf = SVC(kernel = param)
-		clf.fit(X_train, y_train)
-		predict = clf.predict(X_test)
-		accuracy = accuracy_score(y_test, predict) * 100
-		print('\nAccuracy: ', accuracy)
-		precision, recall, fscore, support = precision_recall_fscore_support(y_test, predict, average = 'micro')
-		print('\nPrecision: ', precision, '\nRecall: ', recall, '\nF-score: ', fscore)
-	max_accuracy = max([accuracy_dict[param] for param in accuracy_dict])
-	print("\n max accuracy: ",max_accuracy, " for kernel: ",str(param for param in accuracy_dict if accuracy_dict[param] == max_accuracy))
+    params = ['linear', 'sigmoid']
+    accuracy_dict = {}
+    for param in params:
+        clf = SVC(kernel = param, class_weight='balanced', probability=True)
+        clf.fit(X_train, y_train)
+        predict = clf.predict(X_test)
+        accuracy = accuracy_score(y_test, predict) * 100
+        accuracy_dict[param] = accuracy
+        print('\nAccuracy: ', accuracy)
+        precision, recall, fscore, support = precision_recall_fscore_support(y_test, predict, average = 'micro')
+        print('\nPrecision: ', precision, '\nRecall: ', recall, '\nF-score: ', fscore)
+    # max_accuracy = max([accuracy_dict[param] for param in accuracy_dict])
+    # #print("\n max accuracy: ",max_accuracy, " for kernel: ",str(param for param in accuracy_dict if accuracy_dict[param] == max_accuracy))
