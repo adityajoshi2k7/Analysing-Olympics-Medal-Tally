@@ -33,8 +33,6 @@ def sample_dataset():
     # Separate majority and minority classes
     majority = final_data[final_data.Medal.isnull()]
     minority = final_data[final_data.Medal.notnull()]
-    #print(minority)
-
 
     # Downsample majority class
     majority_downsampled = resample(majority, 
@@ -45,9 +43,6 @@ def sample_dataset():
     #Combine minority class with downsampled majority class
     final_data = pandas.concat([majority_downsampled,minority])
     #final_data=final_data[final_data.NOC=='USA']
-
-    print(final_data)
-
 
     # Display new class counts
     print(final_data['Medal'].value_counts())
