@@ -2,6 +2,7 @@ import numpy as np
 import pandas
 from subprocess import check_call
 import seaborn as sns
+from matplotlib import cm
 from matplotlib import pyplot as plt
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
@@ -88,7 +89,7 @@ def classifier(classifier,X_train,y_train,X_test,y_test):
 def plot_confusion_matrix(cm, classes,
                         normalize=False,
                         title='Confusion matrix',
-                        cmap=plt.cm.Blues):
+                        cmp = cm.Blues):
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
@@ -101,7 +102,7 @@ def plot_confusion_matrix(cm, classes,
 
     print(cm)
 
-    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.imshow(cm, interpolation='nearest', cmap=cmp)
     plt.title(title)
     plt.colorbar()
     tick_marks = np.arange(len(classes))
