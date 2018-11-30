@@ -7,6 +7,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import accuracy_score, precision_recall_fscore_support
 from sklearn.svm import SVC
 #from sklearn.model_selection import GridSearchCV
+from confusion_mat import conf_matrix
 
 def svm(X_train,y_train,X_test,y_test):
     print("1")
@@ -51,5 +52,6 @@ def svclassification(X_train, y_train, X_test, y_test):
         print('\nAccuracy: ', accuracy)
         precision, recall, fscore, support = precision_recall_fscore_support(y_test, predict, average = 'micro')
         print('\nPrecision: ', precision, '\nRecall: ', recall, '\nF-score: ', fscore)
+        conf_matrix(y_test,predict)
     # max_accuracy = max([accuracy_dict[param] for param in accuracy_dict])
     # #print("\n max accuracy: ",max_accuracy, " for kernel: ",str(param for param in accuracy_dict if accuracy_dict[param] == max_accuracy))

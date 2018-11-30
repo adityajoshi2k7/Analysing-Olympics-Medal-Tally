@@ -100,13 +100,13 @@ decision_tree(X_train,y_train,X_test,y_test)
 final_X = final_data.drop(columns = ['Medal'])
 final_Y = final_data['Medal'] 
 #ann_classifier(final_X, final_Y)
-
+'''
 
 # SVM Classifier
 print("SVM Starting\n")
-# svm(X_train, y_train, X_test, y_test)
+svm(X_train, y_train, X_test, y_test)
 
-
+'''
 #LSTM Classifier
 #final_data.set_index('NOC', inplace = True)
 #final_data.sort_index(inplace = True)
