@@ -5,44 +5,21 @@ from subprocess import check_call
 import seaborn as sns
 from matplotlib import pyplot as plt
 from decisionTree import decision_tree
-from svm import svm
-from lstm import lstm_classifier
+#from svm import svm
+#from lstm import lstm_classifier
 #from ann import ann_classifier
+from sampling import sample_dataset
 
-original = pandas.read_csv('athlete_events.csv')
-city_country_map = {'Barcelona' : 'ESP', 'London' : 'GBR', 'Antwerpen' : 'BEL', 'Paris' : 'FRA', 'Los Angeles' : 'USA', 'Helsinki' : 'FIN', 'Sydney' :  'AUS', 'Atlanta' : 'USA', 'Stockholm' : 'SWE', 'Beijing' : 'CHN', 'Rio de Janeiro' : 'BRA',  'Athina' : 'GRE', 'Mexico City' : 'MEX', 'Munich' : 'GER', 'Seoul' : 'KOR', 'Berlin' : 'GER',  'Melbourne' : 'AUS', 'Roma' : 'ITA', 'Amsterdam' : 'NED', 'Montreal' : 'CAN', 'Moskva' : 'RUS', 'Tokyo' : 'JPN', 'St. Louis' : 'USA'}
-
-# remove winter entries and change host city to host country
-summer = original[~original.Season.str.contains("Winter")]
-summer = summer.drop(columns = ['Season', 'Games', 'Name', 'ID', 'Event', 'NOC'])
-summer = summer.rename(index=str, columns={"City" : "Host_Country"})
-summer['Host_Country'] = summer['Host_Country'].replace(city_country_map)
-#print(summer)
-latest_games = summer['Year'] > 2004
-recent = summer[latest_games]
-
-# find recent sports; remove sports not played now
-recent_sports =  recent[['Sport', 'Year']].drop_duplicates().groupby('Sport')['Year'].count().reset_index()['Sport']
-recent_sports = summer.loc[summer['Sport'].isin(recent_sports)]
-
-# remove sports with insufficient data
-recent_sports = recent_sports[['Sport', 'Year']].drop_duplicates().groupby("Sport")['Year'].count().reset_index()
-recent_sports = recent_sports[recent_sports.Year > 6]['Sport']
-
-# keep sports found in recent sports
-final_data = summer.loc[summer['Sport'].isin(recent_sports)]
-
-# Null and NA values - count
-print('\nNull values per attribute: \n', final_data.isnull().sum())
-
+final_data = sample_dataset()
 # replace NA values with column mean
 final_data['Height'].fillna((final_data['Height'].mean()), inplace = True)
 final_data['Weight'].fillna((final_data['Weight'].mean()), inplace = True)
 final_data['Age'].fillna((final_data['Age'].mean()), inplace = True)
+'''
 print('\nCorrelation b/w Age, Height and Weight: \n', final_data[['Age', 'Height', 'Weight']].corr())
 print('\n', final_data.describe())
 
-'''
+
 # Medal Tally - Top 10 countries
 medals_country = final_data.groupby(['Team','Medal'])['Sex'].count().reset_index().sort_values(by = 'Sex', ascending = False)
 medals_country = medals_country.pivot('Team', 'Medal', 'Sex').fillna(0)
@@ -94,6 +71,13 @@ testing_set = final_data.drop(training_set.index, axis = 0)
 training_set = training_set.drop(columns = ['Year'])
 testing_set = testing_set.drop(columns = ['Year'])
 
+print(training_set['Medal'].value_counts())
+print('\nNull values per attribute: \n', training_set['Medal'].isnull().sum())
+print(testing_set['Medal'].value_counts())
+print('\nNull values per attribute: \n', testing_set['Medal'].isnull().sum())
+
+
+
 # divide into X and y
 y_train = training_set[['Medal']].copy()
 X_train = training_set.drop('Medal', 1)
@@ -103,10 +87,10 @@ X_test = testing_set.drop('Medal', 1)
 y_test = testing_set[['Medal']].copy()
 y_test = y_test.replace(np.nan, 'No', regex = True)
 
-'''
+
 # Decision Tree Classifier
 decision_tree(X_train,y_train,X_test,y_test)
-
+'''
 # ANN Classifier
 final_X = final_data.drop(columns = ['Medal'])
 final_Y = final_data['Medal'] 
@@ -115,7 +99,7 @@ final_Y = final_data['Medal']
 
 # SVM Classifier
 print("SVM Starting\n")
-svm(X_train, y_train, X_test, y_test)
+#svm(X_train, y_train, X_test, y_test)
 
 
 # LSTM Classifier
