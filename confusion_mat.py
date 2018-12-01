@@ -5,8 +5,10 @@ from matplotlib import pyplot as plt
 from sklearn.metrics import confusion_matrix, classification_report
 import itertools
 
-def conf_matrix(y_test, y_pred):
-    class_names = ['No Medal','Medal']
+def conf_matrix(y_test, y_pred,binary):
+    class_names = [ "No Medal","Bronze","Gold", "Silver"]
+    if binary:
+        class_names = ['No Medal','Medal']
     print(class_names)
     cnf_matrix = confusion_matrix(y_test, y_pred)
     np.set_printoptions(precision=2)

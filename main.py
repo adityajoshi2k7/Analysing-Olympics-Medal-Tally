@@ -5,7 +5,7 @@ from subprocess import check_call
 import seaborn as sns
 from matplotlib import pyplot as plt
 from decisionTree import decision_tree, plot_validation_curve
-from svm import svm
+#from svm import svm
 
 #from lstm import lstm_classifier
 #from ann import ann_classifier
@@ -13,7 +13,8 @@ from svm import svm
 from sampling import sample_dataset
 from sklearn.model_selection import train_test_split
 
-final_data = sample_dataset(True)
+binary, downsample = False, True
+final_data = sample_dataset(downsample, binary)
 
 # replace NA values with column mean
 final_data['Height'].fillna((final_data['Height'].mean()), inplace = True)
@@ -69,19 +70,6 @@ plt.title("India's Total Medal count")
 #plt.show()
 '''
 
-# Stratified Sampling - testing/training #214510 	#150154		#64356		
-# training_set = final_data[final_data['Year'] < 2000]
-# testing_set = final_data.drop(training_set.index, axis = 0)
-# training_set = training_set.drop(columns = ['Year'])
-# testing_set = testing_set.drop(columns = ['Year'])
-# testing_set = testing_set[pandas.notnull(testing_set['Medal'])]
-# training_set = final_data[final_data['Year'] < 2000]
-# testing_set = final_data.drop(training_set.index, axis = 0)
-
-
-# training_set = training_set.drop(columns = ['Year'])
-# testing_set = testing_set.drop(columns = ['Year'])
-
 training_set, testing_set = train_test_split(final_data, test_size = 0.25, random_state = 100)
 
 
@@ -94,14 +82,15 @@ X_test = testing_set.drop('Medal', 1)
 y_test = testing_set[['Medal']].copy()
 #y_test = y_test.replace(np.nan, 'No', regex = True)
 
+final_X = final_data.drop(columns = ['Medal'])
+final_Y = final_data['Medal']
 
 # Decision Tree Classifier
-#decision_tree(X_train,y_train,X_test,y_test)
+decision_tree(final_X, final_Y, binary)
 
 
 # ANN Classifier
-final_X = final_data.drop(columns = ['Medal'])
-final_Y = final_data['Medal'] 
+ 
 
 #ann_classifier(final_X, final_Y)
 
@@ -109,7 +98,7 @@ final_Y = final_data['Medal']
 
 # SVM Classifier
 print("SVM Starting\n")
-svm(X_train, y_train, X_test, y_test)
+#svm(X_train, y_train, X_test, y_test)
 print("SVM Completed\n")
 
 
@@ -123,5 +112,4 @@ print("SVM Completed\n")
 #print(final_data)
 #lstm_classifier(final_data)
 
-plot_validation_curve(final_X,final_Y)
 

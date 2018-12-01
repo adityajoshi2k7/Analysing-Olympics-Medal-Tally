@@ -13,16 +13,16 @@ import matplotlib.pyplot as plt
 
 def svm(X_train, y_train, X_test, y_test):
 
-    X_train['Sex'],_ = pandas.factorize(X_train['Sex'])
-    X_train['Sport'],_ = pandas.factorize(X_train['Sport'])
-    X_train['NOC'],_ = pandas.factorize(X_train['NOC'])
-    X_train['Host_Country'],_=pandas.factorize(X_train['Host_Country'])
-    y_train['Medal'],_ = pandas.factorize(y_train['Medal'])
-    X_test['Sex'],_ = pandas.factorize(X_test['Sex'])
-    X_test['Sport'],_ = pandas.factorize(X_test['Sport'])
-    X_test['NOC'],_ = pandas.factorize(X_test['NOC'])
-    y_test['Medal'],_ = pandas.factorize(y_test['Medal'])
-    X_test['Host_Country'],_=pandas.factorize(X_test['Host_Country'])
+    # X_train['Sex'],_ = pandas.factorize(X_train['Sex'])
+    # X_train['Sport'],_ = pandas.factorize(X_train['Sport'])
+    # X_train['NOC'],_ = pandas.factorize(X_train['NOC'])
+    # X_train['Host_Country'],_=pandas.factorize(X_train['Host_Country'])
+    # y_train['Medal'],_ = pandas.factorize(y_train['Medal'])
+    # X_test['Sex'],_ = pandas.factorize(X_test['Sex'])
+    # X_test['Sport'],_ = pandas.factorize(X_test['Sport'])
+    # X_test['NOC'],_ = pandas.factorize(X_test['NOC'])
+    # y_test['Medal'],_ = pandas.factorize(y_test['Medal'])
+    # X_test['Host_Country'],_=pandas.factorize(X_test['Host_Country'])
     # params = grid_search(X_train, y_train.values.ravel())
     svclassification(X_train, y_train.values.ravel(), X_test, y_test.values.ravel())
 '''

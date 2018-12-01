@@ -14,76 +14,35 @@ from confusion_mat import conf_matrix
 from yellowbrick.model_selection import ValidationCurve
 
 
-
-# Encoding the attributes for classifier
-def decision_tree(X_train,y_train,X_test,y_test):
-    encoder = preprocessing.LabelEncoder()
-    print(X_train.head(5))
-    X_train['Sex'] = encoder.fit(X_train['Sex']).transform(X_train['Sex'])
-    print('\nSex: ', encoder.classes_)
-    X_train['Sport'] = encoder.fit(X_train['Sport']).transform(X_train['Sport'])
-    print('\nSport: ', encoder.classes_)
-    X_train['NOC']= encoder.fit(X_train['NOC']).transform(X_train['NOC'])
-    print('\nNOC: ', encoder.classes_)
-    X_train['Host_Country'] = encoder.fit(X_train['Host_Country']).transform(X_train['Host_Country'])
-    print('\nHost_Country: ', encoder.classes_)
-    y_train['Medal'] = encoder.fit(y_train['Medal']).transform(y_train['Medal'])
-
-    X_test['Sex'] = encoder.fit(X_test['Sex']).transform(X_test['Sex'])
-    X_test['Sport'] = encoder.fit(X_test['Sport']).transform(X_test['Sport'])
-    X_test['NOC'] = encoder.fit(X_test['NOC']).transform(X_test['NOC'])
-    X_test['Host_Country'] = encoder.fit(X_test['Host_Country']).transform(X_test['Host_Country'])
-    y_test['Medal'] = encoder.fit(y_test['Medal']).transform(y_test['Medal'])
-
-    #classifier('gini', X_train, y_train, X_test, y_test)
-    classifier('entropy', X_train, y_train, X_test, y_test)
-
-
-# def decision_tree(X_train,y_train,X_test,y_test):
-#     X_train['Sex'],_ = pandas.factorize(X_train['Sex'])
-#     X_train['Sport'],_ = pandas.factorize(X_train['Sport'])
-#     X_train['NOC'],_ = pandas.factorize(X_train['NOC'])
-#     X_train['Host_Country'],_=pandas.factorize(X_train['Host_Country'])	
-    
-#     y_train['Medal'],_ = pandas.factorize(y_train['Medal'])
-    
-#     X_test['Sex'],_ = pandas.factorize(X_test['Sex'])
-#     X_test['Sport'],_ = pandas.factorize(X_test['Sport'])
-#     X_test['NOC'],_ = pandas.factorize(X_test['NOC'])	
-#     y_test['Medal'],_ = pandas.factorize(y_test['Medal'])
-#     X_test['Host_Country'],_=pandas.factorize(X_test['Host_Country'])
-#     classifier('gini',X_train,y_train,X_test,y_test)
-#     classifier('entropy',X_train,y_train,X_test,y_test)
-
-
 # Decision Tree classifier
-def classifier(classifier,X_train,y_train,X_test,y_test):
-    dec_classifier = DecisionTreeClassifier(criterion = classifier, random_state = 100, max_depth = 10)
-    dec_classifier.fit(X_train, y_train)
-
-    features = list(X_train.head(0))
-    print(features)
-    if classifier=='gini':
-        export_graphviz(dec_classifier, out_file = 'figures/gini_tree.dot', feature_names = X_train.columns)
-        check_call(['dot','-Tpng','figures/gini_tree.dot','-o','figures/gini_OutputFile.png'])
-    else :
-        export_graphviz(dec_classifier, out_file = 'figures/entropy_tree.dot', feature_names = X_train.columns)
-        check_call(['dot','-Tpng','figures/entropy_tree.dot','-o','figures/entropy_OutputFile.png'])
+def decision_tree(final_X, final_Y, binary):
+    parameters = {"criterion": ["gini","entropy"], 'max_depth':range(3,30)}
+    dec_classifier = GridSearchCV(DecisionTreeClassifier(random_state=123), parameters, n_jobs=4, cv=10)
+    dec_classifier.fit(X=final_X, y=final_Y)
+    tree_model = dec_classifier.best_estimator_
+    print ("best parameter>>>>>", dec_classifier.best_params_)
+    # if classifier=='gini':
+    #     export_graphviz(tree_model, out_file = 'figures/gini_tree.dot', feature_names = final_X.columns)
+    #     check_call(['dot','-Tpng','figures/gini_tree.dot','-o','figures/gini_OutputFile.png'])
+    # else :
+    #     export_graphviz(tree_model, out_file = 'figures/entropy_tree.dot', feature_names = final_X.columns)
+    #     check_call(['dot','-Tpng','figures/entropy_tree.dot','-o','figures/entropy_OutputFile.png'])
         
-    y_pred = dec_classifier.predict(X_test)
-    print('\nClassifier :', classifier)
-    print('\nAccuracy: ', accuracy_score(y_test, y_pred) * 100)
-    precision, recall, fscore, support = precision_recall_fscore_support(y_test, y_pred, average = 'micro')
+    y_pred = tree_model.predict(final_X)
+    # print('\nClassifier :', classifier)
+    print('\nAccuracy: ', accuracy_score(final_Y, y_pred) * 100)
+    precision, recall, fscore, support = precision_recall_fscore_support(final_Y, y_pred, average = 'micro')
     print('\nPrecision: ', precision, '\nRecall: ', recall, '\nF-score: ', fscore)
 
-    #print(dec_classifier.predict_proba([[1, 25 ,173, 70, 204, 204, 20]]))
-    conf_matrix(y_test, y_pred)
+    # #print(dec_classifier.predict_proba([[1, 25 ,173, 70, 204, 204, 20]]))
+    conf_matrix(final_Y,y_pred, binary)
+    plot_validation_curve(final_X,final_Y)
 
 def plot_validation_curve(final_X, final_Y):
 
     viz = ValidationCurve(
         DecisionTreeClassifier(), param_name="max_depth",
-        param_range=np.arange(1, 11), cv=10, scoring="r2"
+        param_range=np.arange(1, 30), cv=10, scoring="accuracy"
     )
 
     # Fit and poof the visualizer
