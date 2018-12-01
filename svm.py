@@ -41,7 +41,7 @@ def grid_search(X_train, Y_train):
     return clf.best_params_['kernel']
 '''
 def svclassification(X_train, y_train, X_test, y_test):
-    params = ['linear', 'sigmoid']
+    params = ['linear']#, 'rbf']
     accuracy_dict = {}
     for param in params:
         clf = SVC(kernel = param, class_weight='balanced', probability=True)
