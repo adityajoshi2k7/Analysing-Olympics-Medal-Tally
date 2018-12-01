@@ -11,6 +11,8 @@ from sklearn import preprocessing
 from sklearn.metrics import confusion_matrix, classification_report
 import itertools
 from confusion_mat import conf_matrix
+from yellowbrick.model_selection import ValidationCurve
+
 
 
 # Encoding the attributes for classifier
@@ -76,3 +78,14 @@ def classifier(classifier,X_train,y_train,X_test,y_test):
 
     #print(dec_classifier.predict_proba([[1, 25 ,173, 70, 204, 204, 20]]))
     conf_matrix(y_test, y_pred)
+
+def plot_validation_curve(final_X, final_Y):
+
+    viz = ValidationCurve(
+        DecisionTreeClassifier(), param_name="max_depth",
+        param_range=np.arange(1, 11), cv=10, scoring="r2"
+    )
+
+    # Fit and poof the visualizer
+    viz.fit(final_X, final_Y)
+    viz.poof()

@@ -4,11 +4,12 @@ import pandas
 from subprocess import check_call
 import seaborn as sns
 from matplotlib import pyplot as plt
-from decisionTree import decision_tree
+from decisionTree import decision_tree, plot_validation_curve
 from svm import svm
-<<<<<<< Updated upstream
-from lstm import lstm_classifier
-from ann import ann_classifier
+
+#from lstm import lstm_classifier
+#from ann import ann_classifier
+
 from sampling import sample_dataset
 from sklearn.model_selection import train_test_split
 
@@ -94,17 +95,17 @@ y_test = testing_set[['Medal']].copy()
 #y_test = y_test.replace(np.nan, 'No', regex = True)
 
 
-# Decision Tree Classifiers
-# decision_tree(X_train,y_train,X_test,y_test)
+# Decision Tree Classifier
+#decision_tree(X_train,y_train,X_test,y_test)
 
-'''
+
 # ANN Classifier
 final_X = final_data.drop(columns = ['Medal'])
 final_Y = final_data['Medal'] 
 
 #ann_classifier(final_X, final_Y)
 
-'''
+
 
 # SVM Classifier
 print("SVM Starting\n")
@@ -120,5 +121,7 @@ print("SVM Completed\n")
 # final_data = final_data.reset_index(drop = True)
 # final_data.replace(np.nan, 'No', regex = True, inplace = True)
 #print(final_data)
-lstm_classifier(final_data)
+#lstm_classifier(final_data)
+
+plot_validation_curve(final_X,final_Y)
 
