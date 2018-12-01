@@ -12,7 +12,6 @@ def sample_dataset(sample=False, binary=False):
     summer = summer.drop(columns = ['Season', 'Games', 'Name', 'ID', 'Event','Team',])
     summer = summer.rename(index=str, columns={"City" : "Host_Country"})
     summer['Host_Country'] = summer['Host_Country'].replace(city_country_map)
-    #print(summer)
     latest_games = summer['Year'] > 2004
     recent = summer[latest_games]
 
@@ -47,11 +46,9 @@ def sample_dataset(sample=False, binary=False):
 
         #Combine minority class with downsampled majority class
         final_data = pandas.concat([majority_downsampled,minority])
-        #final_data=final_data[final_data.NOC=='USA']
 
         # Display new class counts
         print(final_data['Medal'].value_counts())
-        #print('\nNull values per attribute: \n', final_data['Medal'].isnull().sum())
 
     final_data['Sex'],_ = pandas.factorize(final_data['Sex'])
     final_data['Sport'],_ = pandas.factorize(final_data['Sport'])

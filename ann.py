@@ -11,7 +11,6 @@ from tensorflow import set_random_seed
 
 seed(10)
 set_random_seed(20)
-#ANN begins
 accuracy = []
 max_accuracy = 0
 optimial_params = []
@@ -25,14 +24,6 @@ def create_ann_model(activation = 'relu', neurons = 1, optimizer = 'adam'):
 
 def ann_classifier(final_X, final_Y):
     # defining grid search parameters
-    print(final_Y.head(2))
-    # final_X['Sex'],_ = pandas.factorize(final_X['Sex'])
-    # final_X['Sport'],_ = pandas.factorize(final_X['Sport'])
-    # final_X['NOC'],_ = pandas.factorize(final_X['NOC'])
-    # final_X['Host_Country'],_ = pandas.factorize(final_X['Host_Country'])   
-    
-    # final_Y,_ = pandas.factorize(final_Y)
-
     neurons = [2, 6, 8, 10, 14]      #[2, 4, 6, 8, 10]
     optimizer = ['adam']            #['adam', 'sgd', 'rmsprop']
     activation = ['relu']       #['relu', 'sigmoid', 'tanh', 'linear']
@@ -47,11 +38,3 @@ def ann_classifier(final_X, final_Y):
 
     # Best combination of hyper-parameters
     print('Best parameter: ', grid_results.best_score_, grid_results.best_params_)
-
-
-
-
-
-
-
-

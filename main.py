@@ -70,17 +70,17 @@ plt.title("India's Total Medal count")
 #plt.show()
 '''
 
-training_set, testing_set = train_test_split(final_data, test_size = 0.25, random_state = 100)
+# training_set, testing_set = train_test_split(final_data, test_size = 0.25, random_state = 100)
 
 
-# divide into X and y
-y_train = training_set[['Medal']].copy()
-X_train = training_set.drop('Medal', 1)
-#y_train = y_train.replace(np.nan, 'No', regex = True)
+# # divide into X and y
+# y_train = training_set[['Medal']].copy()
+# X_train = training_set.drop('Medal', 1)
+# #y_train = y_train.replace(np.nan, 'No', regex = True)
 
-X_test = testing_set.drop('Medal', 1)
-y_test = testing_set[['Medal']].copy()
-#y_test = y_test.replace(np.nan, 'No', regex = True)
+# X_test = testing_set.drop('Medal', 1)
+# y_test = testing_set[['Medal']].copy()
+# #y_test = y_test.replace(np.nan, 'No', regex = True)
 
 final_X = final_data.drop(columns = ['Medal'])
 final_Y = final_data['Medal']
@@ -90,16 +90,14 @@ decision_tree(final_X, final_Y, binary)
 
 
 # ANN Classifier
- 
-
-#ann_classifier(final_X, final_Y)
+ #ann_classifier(final_X, final_Y)
 
 
 
 # SVM Classifier
-print("SVM Starting\n")
-#svm(X_train, y_train, X_test, y_test)
-print("SVM Completed\n")
+# print("SVM Starting\n")
+# #svm(X_train, y_train, X_test, y_test)
+# print("SVM Completed\n")
 
 
 #LSTM Classifier
