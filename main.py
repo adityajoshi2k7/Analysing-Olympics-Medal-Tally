@@ -6,13 +6,8 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from decisionTree import decision_tree
 from svm import svm
-<<<<<<< HEAD
-#from lstm import lstm_classifier
-from ann import ann_classifier
-=======
 from lstm import lstm_classifier
-#from ann import ann_classifier
->>>>>>> fe057d4794ca6e21df8ea0a95c3deec490617119
+from ann import ann_classifier
 from sampling import sample_dataset
 from sklearn.model_selection import train_test_split
 
@@ -99,7 +94,7 @@ y_test = testing_set[['Medal']].copy()
 
 
 # Decision Tree Classifiers
-decision_tree(X_train,y_train,X_test,y_test)
+# decision_tree(X_train,y_train,X_test,y_test)
 
 '''
 # ANN Classifier
@@ -111,17 +106,18 @@ final_Y = final_data['Medal']
 '''
 
 # SVM Classifier
-#print("SVM Starting\n")
-#svm(X_train, y_train, X_test, y_test)
+print("SVM Starting\n")
+svm(X_train, y_train, X_test, y_test)
+print("SVM Completed\n")
 
 
 #LSTM Classifier
 #final_data.set_index('NOC', inplace = True)
 #final_data.sort_index(inplace = True)
 #final_data = final_data.groupby('NOC').groups
-final_data.sort_values('NOC', inplace = True)
-final_data = final_data.reset_index(drop = True)
-final_data.replace(np.nan, 'No', regex = True, inplace = True)
+# final_data.sort_values('NOC', inplace = True)
+# final_data = final_data.reset_index(drop = True)
+# final_data.replace(np.nan, 'No', regex = True, inplace = True)
 #print(final_data)
 #lstm_classifier(final_data)
 
