@@ -9,8 +9,8 @@ from sklearn.svm import SVC
 #from sklearn.model_selection import GridSearchCV
 from confusion_mat import conf_matrix
 
-def svm(X_train,y_train,X_test,y_test):
-    print("1")
+def svm(X_train, y_train, X_test, y_test):
+
     X_train['Sex'],_ = pandas.factorize(X_train['Sex'])
     X_train['Sport'],_ = pandas.factorize(X_train['Sport'])
     X_train['NOC'],_ = pandas.factorize(X_train['NOC'])

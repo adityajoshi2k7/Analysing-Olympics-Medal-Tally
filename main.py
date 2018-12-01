@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 from decisionTree import decision_tree
 from svm import svm
 #from lstm import lstm_classifier
-#from ann import ann_classifier
+from ann import ann_classifier
 from sampling import sample_dataset
 from sklearn.model_selection import train_test_split
 
@@ -95,11 +95,13 @@ y_test = testing_set[['Medal']].copy()
 
 # Decision Tree Classifier
 decision_tree(X_train,y_train,X_test,y_test)
-'''
+
 # ANN Classifier
 final_X = final_data.drop(columns = ['Medal'])
 final_Y = final_data['Medal'] 
+
 #ann_classifier(final_X, final_Y)
+
 '''
 
 # SVM Classifier
@@ -115,6 +117,5 @@ final_data.sort_values('NOC', inplace = True)
 final_data = final_data.reset_index(drop = True)
 final_data.replace(np.nan, 'No', regex = True, inplace = True)
 #print(final_data)
-lstm_classifier(final_data)
+#lstm_classifier(final_data)
 
-'''

@@ -16,7 +16,7 @@ from confusion_mat import conf_matrix
 # Encoding the attributes for classifier
 def decision_tree(X_train,y_train,X_test,y_test):
     encoder = preprocessing.LabelEncoder()
-
+    print(X_train.head(5))
     X_train['Sex'] = encoder.fit(X_train['Sex']).transform(X_train['Sex'])
     print('\nSex: ', encoder.classes_)
     X_train['Sport'] = encoder.fit(X_train['Sport']).transform(X_train['Sport'])
