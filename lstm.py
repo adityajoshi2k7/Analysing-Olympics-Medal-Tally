@@ -16,7 +16,9 @@ def lstm_classifier(final_data):
 	print(country_count, ' ', year_count)
 
 	# reshape - # countries, time series, # attributes
-	final_X = final_X.reshape(country_count, year_count, final_X.shape[1])
+	#final_X = final_X.reshape(country_count, year_count, final_X.shape[1])
+	final_X = final_X.groupby("Country", as_index=True)['Year', 'Sex', 'Age', 'Height', 'Weight', 'NOC', 'Host_Country', 'Sport'].apply(lambda x: x.values.tolist())
+	final_Y = final_Y.groupby("Country", as_index=True)['Medal' ].apply(lambda x: x.values.tolist())
 
 	# define model - 10 hidden nodes
 	model = Sequential()
