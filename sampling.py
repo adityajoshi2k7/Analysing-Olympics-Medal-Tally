@@ -38,7 +38,7 @@ def sample_dataset(sample=False):
         # Downsample majority class
         majority_downsampled = resample(majority, 
                                         replace=False,    # sample without replacement
-                                        n_samples=33000,     # to match minority class
+                                        n_samples=91000,     # to match minority class
                                         random_state=123) # reproducible results
 
         #Combine minority class with downsampled majority class
