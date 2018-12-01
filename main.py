@@ -6,6 +6,7 @@ import seaborn as sns
 from matplotlib import pyplot as plt
 from decisionTree import decision_tree
 from svm import svm
+<<<<<<< Updated upstream
 from lstm import lstm_classifier
 from ann import ann_classifier
 from sampling import sample_dataset
@@ -119,5 +120,5 @@ print("SVM Completed\n")
 # final_data = final_data.reset_index(drop = True)
 # final_data.replace(np.nan, 'No', regex = True, inplace = True)
 #print(final_data)
-#lstm_classifier(final_data)
+lstm_classifier(final_data)
 
