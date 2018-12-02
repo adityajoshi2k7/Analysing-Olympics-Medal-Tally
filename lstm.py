@@ -21,14 +21,17 @@ def lstm_classifier(final_data):
 	final_X = final_data.groupby("NOC", as_index=True)['Year', 'Sex', 'Age', 'Height', 'Weight', 'Host_Country', 'Sport'].apply(lambda x: x.values.tolist())
 	final_Y = final_data.groupby("NOC", as_index=True)['Medal'].apply(lambda x: x.values.tolist())
 	final_X = pad_sequences(final_X, maxlen=None, dtype='float', padding='post', truncating='post', value=0.0)
+	final_Y = pad_sequences(final_Y, maxlen=None, dtype='float', padding='post', truncating='post', value=0.0)
 
 	print(final_X.shape)
+	print(final_Y[189])
+	print(final_Y.shape)
 
 	# define model - 10 hidden nodes
 	model = Sequential()
 	model.add(LSTM(10, batch_input_shape = (2, len(final_X[0]), len(final_X[0][0])), return_sequences = True, stateful=True))
 	model.add( LSTM(10, return_sequences = False))
-	model.add(Dense(1, activation = 'sigmoid'))
+	model.add(Dense(5272, activation = 'sigmoid'))
 	model.summary()
 	model.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy'])
 
