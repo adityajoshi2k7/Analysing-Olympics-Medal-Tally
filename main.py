@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 from decisionTree import decision_tree, plot_validation_curve
 #from svm import svm
 
-#from lstm import lstm_classifier
+from lstm import lstm_classifier
 from ann import ann_classifier
 #from keras import backend as k
 from sampling import sample_dataset
@@ -90,13 +90,13 @@ plt.title("India's Total Medal count")
 
 final_X = final_data.drop(columns = ['Medal'])
 final_Y = final_data['Medal']
-print('final size: ', final_X.shape)
+# print('final size: ', final_X.shape)
 # Decision Tree Classifier
 #decision_tree(final_X, final_Y, binary)
 
 
 # ANN Classifier
-ann_classifier(final_X, final_Y)
+#ann_classifier(final_X, final_Y)
 
 
 
@@ -114,6 +114,6 @@ ann_classifier(final_X, final_Y)
 # final_data = final_data.reset_index(drop = True)
 # final_data.replace(np.nan, 'No', regex = True, inplace = True)
 #print(final_data)
-#lstm_classifier(final_data)
+lstm_classifier(final_data)
 
 
