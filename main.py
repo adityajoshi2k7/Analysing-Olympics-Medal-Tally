@@ -8,10 +8,16 @@ from decisionTree import decision_tree, plot_validation_curve
 #from svm import svm
 
 #from lstm import lstm_classifier
-#from ann import ann_classifier
-
+from ann import ann_classifier
+#from keras import backend as k
 from sampling import sample_dataset
 from sklearn.model_selection import train_test_split
+from numpy.random import seed
+from tensorflow import set_random_seed
+
+#k.clear_session()
+seed(10)
+set_random_seed(20)
 
 binary, downsample = False, True
 final_data = sample_dataset(downsample, binary)
@@ -84,13 +90,13 @@ plt.title("India's Total Medal count")
 
 final_X = final_data.drop(columns = ['Medal'])
 final_Y = final_data['Medal']
-
+print('final size: ', final_X.shape)
 # Decision Tree Classifier
-decision_tree(final_X, final_Y, binary)
+#decision_tree(final_X, final_Y, binary)
 
 
 # ANN Classifier
- #ann_classifier(final_X, final_Y)
+ann_classifier(final_X, final_Y)
 
 
 
