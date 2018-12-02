@@ -29,14 +29,14 @@ def lstm_classifier(final_data):
 
 	# define model - 10 hidden nodes
 	model = Sequential()
-	model.add(LSTM(10, batch_input_shape = (2, len(final_X[0]), len(final_X[0][0])), return_sequences = True, stateful=True))
+	model.add(LSTM(10, batch_input_shape = (109, len(final_X[0]), len(final_X[0][0])), return_sequences = True, stateful = False))
 	model.add( LSTM(10, return_sequences = False))
 	model.add(Dense(5272, activation = 'sigmoid'))
 	model.summary()
 	model.compile(optimizer = 'adam', loss = 'mean_squared_error', metrics = ['accuracy'])
 
 	# fit network
-	history = model.fit(final_X, final_Y, epochs = 10, batch_size = 2, verbose = 2)
+	history = model.fit(final_X, final_Y, epochs = 10, batch_size = 109, verbose = 1)
 
 	loss, accuracy = model.evaluate(final_X, final_Y)
 	print(accuracy)
